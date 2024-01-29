@@ -1,0 +1,6 @@
+@ServerBackendHooliTees_HostAddress = http://localhost:5047
+
+GET {{ServerBackendHooliTees_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
