@@ -1,4 +1,6 @@
 
+using ServerBackendHooliTees.Database;
+
 namespace ServerBackendHooliTees
 {
     public class Program
@@ -14,7 +16,15 @@ namespace ServerBackendHooliTees
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<MyDbContext>();
+
             var app = builder.Build();
+
+            using (IServiceScope scope = app.Services.CreateScope())
+            {
+                MyDbContext dbContext = scope.ServiceProvider.GetService<MyDbContext>();
+                dbContext.Database.EnsureCreated();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

@@ -10,4 +10,8 @@ public class Users
     public string Address { get; set; }
     public Boolean IsAdmin { get; set; }
 
+    //  Foreng Keys
+    public ICollection<Orders> Orders { get; set; } 
+    
+
 }
