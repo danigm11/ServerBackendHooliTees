@@ -12,5 +12,8 @@ public class Orders
     public decimal TotalPrice {  get; set; }
     public string Status {  get; set; }
     public DateTime Date {  get; set; }
+
+    //  Foreign Key
     public ICollection<Users> Users { get; set; }
+    public ICollection<ProductOrder> ProductOrder { get; set; }
 }
