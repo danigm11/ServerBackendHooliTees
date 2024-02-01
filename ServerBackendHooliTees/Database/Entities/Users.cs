@@ -12,6 +12,6 @@ public class Users
 
     //  Foreng Keys
     public ICollection<Orders> Orders { get; set; } 
-    public ShoppingCart ShoppingCart { get; set; }
+    
 
 }

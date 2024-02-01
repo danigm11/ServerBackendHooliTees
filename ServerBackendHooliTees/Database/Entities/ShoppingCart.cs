@@ -7,5 +7,7 @@ public class ShoppingCart
     public int UserId { get; set; }
 
     // Foreign Keys
-    public ICollection<ShoppingCart> ShoppingCartId { get; set; }
+
+    public Users Users { get; set; }
+    public ICollection<CartProduct> CartProduct { get; set; }
 }
