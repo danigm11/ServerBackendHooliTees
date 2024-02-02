@@ -1,5 +1,7 @@
-﻿namespace ServerBackendHooliTees.Models.Database.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+namespace ServerBackendHooliTees.Models.Database.Entities;
 
+[Index(nameof(Email), IsUnique = true)]
 public class Users
 {
 

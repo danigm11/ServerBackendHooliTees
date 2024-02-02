@@ -51,21 +51,18 @@ public class UserController : ControllerBase
     [HttpPost("login")]
     public async Task<Boolean> Post([FromForm]UserLoginDto userLoginDto)
     {
+        //  Ejemplo
+        //  var t = dbContextHoolitees.Users.FirstOrDefault(user => user.Email == "");
 
-        List<Users> users = new List<Users>();
-
-        foreach (Users userList in users)
+        foreach (Users userList in dbContextHoolitees.Users.ToList())
         {
-            Console.WriteLine("Hola");
-            Console.WriteLine(userList);
-        }
-
-        //Console.WriteLine(users);
-
-
-        if (userLoginDto.Email == "ejemplo@gmail")
-        {
-            return true;
+            if ( userList.Email == userLoginDto.Email )
+            {
+                if (userList.Password == userLoginDto.Password)
+                {
+                    return true;
+                }
+            }
         }
 
         return false;
