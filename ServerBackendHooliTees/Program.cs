@@ -30,6 +30,14 @@ namespace ServerBackendHooliTees
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+                //Uso de CORS
+                app.UseCors(config => config
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true)
+                    .AllowCredentials());
+
             }
 
             app.UseHttpsRedirection();
@@ -40,7 +48,8 @@ namespace ServerBackendHooliTees
 
             app.MapControllers();
 
-            app.Run();
+            
+        app.Run();
         }
     }
 }
