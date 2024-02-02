@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ServerBackendHooliTees.Models.Database;
 using ServerBackendHooliTees.Models.Database.Entities;
 using ServerBackendHooliTees.Models.Dtos;
+using System.IO;
 using System.Security.Claims;
 
 namespace ServerBackendHooliTees.Controllers;
@@ -27,7 +28,7 @@ public class UserController : ControllerBase
     }
 
 
-    [HttpPost("signin")]
+    [HttpPost("signup")]
     public async Task<IActionResult> Post([FromForm] UserSignDto userSignDto)
     {
 
@@ -51,7 +52,18 @@ public class UserController : ControllerBase
     public async Task<Boolean> Post([FromForm]UserLoginDto userLoginDto)
     {
 
-        if (userLoginDto.Email.Equals("ejemplo@gmail.com"))
+        List<Users> users = new List<Users>();
+
+        foreach (Users userList in users)
+        {
+            Console.WriteLine("Hola");
+            Console.WriteLine(userList);
+        }
+
+        //Console.WriteLine(users);
+
+
+        if (userLoginDto.Email == "ejemplo@gmail")
         {
             return true;
         }
