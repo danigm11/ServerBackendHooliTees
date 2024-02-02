@@ -1,4 +1,4 @@
-﻿namespace ServerBackendHooliTees.Database.Entities
+﻿namespace ServerBackendHooliTees.Models.Database.Entities
 {
     public class Products
     {
@@ -6,8 +6,8 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public int Stock {  get; set; }
-        public string Image {  get; set; }
+        public int Stock { get; set; }
+        public string Image { get; set; }
 
         //  Foreign Keys
         public ICollection<CartProduct> CartProduct { get; set; }

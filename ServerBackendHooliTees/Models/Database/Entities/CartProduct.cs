@@ -1,4 +1,4 @@
-﻿namespace ServerBackendHooliTees.Database.Entities;
+﻿namespace ServerBackendHooliTees.Models.Database.Entities;
 
 public class CartProduct
 {
@@ -6,7 +6,7 @@ public class CartProduct
     public int Quantity { get; set; }
 
     // Foreign Keys
-    public ICollection<ShoppingCart> ShoppingCart {  get; set; }
+    public ICollection<ShoppingCart> ShoppingCart { get; set; }
     public ICollection<Products> Products { get; set; }
 
 }

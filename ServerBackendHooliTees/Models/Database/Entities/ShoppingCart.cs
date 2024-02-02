@@ -1,4 +1,4 @@
-﻿namespace ServerBackendHooliTees.Database.Entities;
+﻿namespace ServerBackendHooliTees.Models.Database.Entities;
 
 public class ShoppingCart
 {

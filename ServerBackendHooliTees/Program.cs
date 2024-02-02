@@ -1,5 +1,4 @@
-
-using ServerBackendHooliTees.Database;
+using ServerBackendHooliTees.Models.Database;
 
 namespace ServerBackendHooliTees
 {
@@ -37,6 +36,7 @@ namespace ServerBackendHooliTees
 
             app.UseAuthorization();
 
+            app.UseStaticFiles();
 
             app.MapControllers();
 

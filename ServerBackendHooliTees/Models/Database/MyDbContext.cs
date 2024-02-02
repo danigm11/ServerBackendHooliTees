@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ServerBackendHooliTees.Database.Entities;
+using ServerBackendHooliTees.Models.Database.Entities;
 
-namespace ServerBackendHooliTees.Database;
+namespace ServerBackendHooliTees.Models.Database;
 
 public class MyDbContext : DbContext
 {
