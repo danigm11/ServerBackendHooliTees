@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ServerBackendHooliTees.Models.Database;
 using ServerBackendHooliTees.Models.Database.Entities;
@@ -14,6 +15,8 @@ public class UserController : ControllerBase
 {
 
     private MyDbContext dbContextHoolitees;
+    private PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
+    //var passwordHasher = new PasswordHasher<string>();
 
     public UserController(MyDbContext dbContext)
     {
@@ -31,12 +34,13 @@ public class UserController : ControllerBase
     [HttpPost("signup")]
     public async Task<IActionResult> Post([FromForm] UserSignDto userSignDto)
     {
+        string hashedPassword = passwordHasher.HashPassword(userSignDto.Name, userSignDto.Password);
 
         Users newUser = new Users()
         {
             Name = userSignDto.Name,
             Email = userSignDto.Email,
-            Password = userSignDto.Password,
+            Password = hashedPassword,
             Address = userSignDto.Address
         };
 
@@ -58,7 +62,9 @@ public class UserController : ControllerBase
         {
             if ( userList.Email == userLoginDto.Email )
             {
-                if (userList.Password == userLoginDto.Password)
+                var result = passwordHasher.VerifyHashedPassword(userList.Name, userList.Password, userLoginDto.Password);
+
+                if (result == PasswordVerificationResult.Success)
                 {
                     return true;
                 }
