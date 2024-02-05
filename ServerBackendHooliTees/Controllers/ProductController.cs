@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServerBackendHooliTees.Models.Database;
@@ -21,12 +22,33 @@ namespace ServerBackendHooliTees.Controllers
         {
             return dbContextHoolitees.Products.Select(ToDto);
         }
-       /* [HttpGet("productcatalog")]
-        public IEnumerable<ProductCartDto> GetProductCart()
+        /* [HttpGet("productcatalog")]
+         public IEnumerable<ProductCartDto> GetProductCart()
+         {
+             return dbContextHoolitees.CartProducts.Select(CartDto);
+         }
+        */
+        [HttpPost("productedit")]
+        public async Task<IActionResult> Post([FromForm] ProductViewDto productView)
         {
-            return dbContextHoolitees.CartProducts.Select(CartDto);
+
+            Products newProduct = new Products()
+            {
+                Name = productView.Name,
+                Id = productView.Id,
+                Image = productView.image,
+                Description = productView.Description,
+                Price = productView.Price,
+                Stock = productView.Stock
+            };
+
+            await dbContextHoolitees.Products.AddAsync(newProduct);
+            await dbContextHoolitees.SaveChangesAsync();
+
+            ProductViewDto productCreated = ToDto(newProduct);
+
+            return Created($"/{productView.Id}", productCreated);
         }
-       */
         private ProductViewDto ToDto(Products Products)
         {
             return new ProductViewDto
@@ -50,10 +72,6 @@ namespace ServerBackendHooliTees.Controllers
             };
         }
        */
-       private ProductCatalogDto ToPCDto(Products Products)
-        {
-            return new 
-        }
     }
 }
 
