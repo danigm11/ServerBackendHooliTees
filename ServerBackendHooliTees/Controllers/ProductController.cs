@@ -50,6 +50,10 @@ namespace ServerBackendHooliTees.Controllers
             };
         }
        */
+       private ProductCatalogDto ToPCDto(Products Products)
+        {
+            return new 
+        }
     }
 }
 
