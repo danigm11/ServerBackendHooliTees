@@ -13,29 +13,32 @@ namespace ServerBackendHooliTees.Controllers
     public class ProductController : ControllerBase
     {
         private MyDbContext dbContextHoolitees;
+
         public ProductController(MyDbContext dbContext)
         {
             dbContextHoolitees = dbContext;
         }
+
         [HttpGet("productdetail")]
         public IEnumerable<ProductViewDto> GetProductView()
         {
             return dbContextHoolitees.Products.Select(ToDto);
         }
+
         /* [HttpGet("productcatalog")]
          public IEnumerable<ProductCartDto> GetProductCart()
          {
              return dbContextHoolitees.CartProducts.Select(CartDto);
          }
         */
-        [HttpPost("productedit")]
+
+        [HttpPost("productcreated")]
         public async Task<IActionResult> Post([FromForm] ProductViewDto productView)
         {
 
             Products newProduct = new Products()
             {
                 Name = productView.Name,
-                Id = productView.Id,
                 Image = productView.image,
                 Description = productView.Description,
                 Price = productView.Price,
@@ -47,13 +50,13 @@ namespace ServerBackendHooliTees.Controllers
 
             ProductViewDto productCreated = ToDto(newProduct);
 
-            return Created($"/{productView.Id}", productCreated);
+            return Created($"/{newProduct.Id}", productCreated);
         }
+
         private ProductViewDto ToDto(Products Products)
         {
             return new ProductViewDto
             {
-                Id = Products.Id,
                 Name = Products.Name,
                 image = Products.Image,
                 Description = Products.Description,
@@ -61,6 +64,7 @@ namespace ServerBackendHooliTees.Controllers
                 Stock = Products.Stock
             };
         }
+
        /* private ProductCartDto CartDto(CartProduct cartProduct)
         {
             return new ProductCartDto
