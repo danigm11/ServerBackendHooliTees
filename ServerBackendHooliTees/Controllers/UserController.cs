@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using ServerBackendHooliTees.Models.Database;
 using ServerBackendHooliTees.Models.Database.Entities;
 using ServerBackendHooliTees.Models.Dtos;
-using System.IO;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace ServerBackendHooliTees.Controllers;
 
@@ -17,10 +19,16 @@ public class UserController : ControllerBase
     private MyDbContext dbContextHoolitees;
     private PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
     //var passwordHasher = new PasswordHasher<string>();
+    private readonly TokenValidationParameters _tokenParameters;
 
-    public UserController(MyDbContext dbContext)
+    public UserController(MyDbContext dbContext, IOptionsMonitor<JwtBearerOptions> jwtOptions)
     {
+        //  Base de Datos
         dbContextHoolitees = dbContext;
+
+        //  JWToken
+        _tokenParameters = jwtOptions.Get(JwtBearerDefaults.AuthenticationScheme)
+            .TokenValidationParameters;
     }
 
 
@@ -53,7 +61,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<Boolean> Post([FromForm]UserLoginDto userLoginDto)
+    public IActionResult Login([FromForm]UserLoginDto userLoginDto)
     {
         //  Ejemplo
         //  var t = dbContextHoolitees.Users.FirstOrDefault(user => user.Email == "");
@@ -62,16 +70,47 @@ public class UserController : ControllerBase
         {
             if ( userList.Email == userLoginDto.Email )
             {
+                //  Cifar los datos del usuario
                 var result = passwordHasher.VerifyHashedPassword(userList.Name, userList.Password, userLoginDto.Password);
 
-                if (result == PasswordVerificationResult.Success)
+                if ( result == PasswordVerificationResult.Success)
                 {
-                    return true;
+                    string rol = "";
+
+                    if (userList.IsAdmin == true)
+                    {
+                        //string ro = "admin"
+                        rol = "admin";
+                    }
+
+                    //  Creamos el Token
+                    var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        //  Datos para autorizar al usario
+                        Claims = new Dictionary<string, object>
+                    {
+                        {"id", Guid.NewGuid().ToString() },
+                        { ClaimTypes.Role, rol  }
+                    },
+                        //  Caducidad del Token
+                        Expires = DateTime.UtcNow.AddDays(5),
+                        //  Clave y algoritmo de firmado
+                        SigningCredentials = new SigningCredentials(
+                            _tokenParameters.IssuerSigningKey,
+                            SecurityAlgorithms.HmacSha256Signature)
+                    };
+
+                    //  Creamos el token y lo devolvemos al usuario logeado
+                    JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                    SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+                    string stringToken = tokenHandler.WriteToken(token);
+
+                    return Ok(stringToken);
                 }
+
             }
         }
-
-        return false;
+        return Unauthorized("Usuario no existe");
     }
 
     private UserSignDto ToDto(Users users)
