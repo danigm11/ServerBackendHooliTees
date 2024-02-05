@@ -1,4 +1,6 @@
+using Microsoft.IdentityModel.Tokens;
 using ServerBackendHooliTees.Models.Database;
+using System.Text;
 
 namespace ServerBackendHooliTees
 {
@@ -16,6 +18,23 @@ namespace ServerBackendHooliTees
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<MyDbContext>();
+
+            builder.Services.AddAuthentication().AddJwtBearer(options =>
+            {
+                string Key = Environment.GetEnvironmentVariable("JWT_KEY");
+
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    //  Validar el emisor del token.
+                    ValidateIssuer = false,
+
+                    //  Audiencia
+                    ValidateAudience = false,
+
+                    //  Idicamos la clave
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key))
+                };
+            });
 
             var app = builder.Build();
 
@@ -42,6 +61,8 @@ namespace ServerBackendHooliTees
 
             app.UseHttpsRedirection();
 
+            // JWT
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseStaticFiles();
