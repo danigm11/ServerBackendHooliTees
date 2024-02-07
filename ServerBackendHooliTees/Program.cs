@@ -8,6 +8,9 @@ namespace ServerBackendHooliTees
     {
         public static void Main(string[] args)
         {
+            // Configuramos para que el directorio de trabajo sea donde está el ejecutable
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
