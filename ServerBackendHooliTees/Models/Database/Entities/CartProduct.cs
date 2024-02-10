@@ -2,7 +2,9 @@
 
 public class CartProduct
 {
-    public int CartProductId { get; set; }
+    public int Id { get; set; }
+    public int ProductsId { get; set; }
+    public int ShoppingCartId { get; set; }
     public int Quantity { get; set; }
 
     // Foreign Keys

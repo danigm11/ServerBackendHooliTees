@@ -12,6 +12,8 @@ public class Users
     public string Address { get; set; }
     public bool IsAdmin { get; set; }
 
+    public int OrdersId { get; set; }
+
     //  Foreng Keys
     public ICollection<Orders> Orders { get; set; }
 

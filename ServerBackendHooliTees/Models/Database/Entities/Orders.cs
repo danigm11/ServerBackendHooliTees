@@ -12,6 +12,9 @@ public class Orders
     public string Status { get; set; }
     public DateTime Date { get; set; }
 
+    public int UsersId { get; set; }
+    public int ProductOrderId { get; set; }
+
     //  Foreign Key
     public ICollection<Users> Users { get; set; }
     public ICollection<ProductOrder> ProductOrder { get; set; }

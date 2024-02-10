@@ -16,7 +16,7 @@ namespace ServerBackendHooliTees.Controllers;
 public class UserController : ControllerBase
 {
 
-    private MyDbContext dbContextHoolitees;
+    private MyDbContext _dbContextHoolitees;
     private PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
     //var passwordHasher = new PasswordHasher<string>();
     private readonly TokenValidationParameters _tokenParameters;
@@ -24,7 +24,7 @@ public class UserController : ControllerBase
     public UserController(MyDbContext dbContext, IOptionsMonitor<JwtBearerOptions> jwtOptions)
     {
         //  Base de Datos
-        dbContextHoolitees = dbContext;
+        _dbContextHoolitees = dbContext;
 
         //  JWToken
         _tokenParameters = jwtOptions.Get(JwtBearerDefaults.AuthenticationScheme)
@@ -35,12 +35,12 @@ public class UserController : ControllerBase
     [HttpGet("userlist")]
     public IEnumerable<UserSignDto> GetUser()
     {
-        return dbContextHoolitees.Users.Select(ToDto);
+        return _dbContextHoolitees.Users.Select(ToDto);
     }
 
 
     [HttpPost("signup")]
-    public async Task<IActionResult> Post([FromForm] UserSignDto userSignDto)
+    public async Task<IActionResult> Post([FromForm] CreateUser userSignDto)
     {
         string hashedPassword = passwordHasher.HashPassword(userSignDto.Name, userSignDto.Password);
 
@@ -52,10 +52,22 @@ public class UserController : ControllerBase
             Address = userSignDto.Address
         };
 
-        await dbContextHoolitees.Users.AddAsync(newUser);
-        await dbContextHoolitees.SaveChangesAsync();
+        
+
+        await _dbContextHoolitees.Users.AddAsync(newUser);
+        await _dbContextHoolitees.SaveChangesAsync();
 
         UserSignDto userCreated = ToDto(newUser);
+
+
+        ShoppingCart newCart = new ShoppingCart()
+        {
+            UserId = userCreated.Id,
+            CartProductId = userCreated.Id
+        };
+
+        await _dbContextHoolitees.ShoppingCarts.AddAsync(newCart);
+        await _dbContextHoolitees.SaveChangesAsync();
 
         return Created($"/{newUser.Id}", userCreated);
     }
@@ -66,7 +78,7 @@ public class UserController : ControllerBase
         //  Ejemplo
         //  var t = dbContextHoolitees.Users.FirstOrDefault(user => user.Email == "");
 
-        foreach (Users userList in dbContextHoolitees.Users.ToList())
+        foreach (Users userList in _dbContextHoolitees.Users.ToList())
         {
             if ( userList.Email == userLoginDto.Email )
             {
@@ -117,6 +129,7 @@ public class UserController : ControllerBase
     {
         return new UserSignDto()
         {
+            Id = (int)users.Id,
             Name = users.Name,
             Email = users.Email,
             Password = users.Password,
