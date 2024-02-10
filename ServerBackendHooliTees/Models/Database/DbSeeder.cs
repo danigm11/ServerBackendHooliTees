@@ -14,17 +14,16 @@ namespace ServerBackendHooliTees.Models.Database
             bool create = await _dBContext.Database.EnsureCreatedAsync();
             if(create)
             {
-                await SeedImagesAsync();
+                await SeedProductAsync();
             }
             _dBContext.SaveChanges();
         }
-        public async Task SeedImagesAsync()
+        public async Task SeedProductAsync()
         {
-            Image[] images =
+            Products[] product =
             [
-
             ];
-            await _dBContext.Images.AddRangeAsync(images);
+            await _dBContext.Products.AddRangeAsync();
         }
     }
 }
