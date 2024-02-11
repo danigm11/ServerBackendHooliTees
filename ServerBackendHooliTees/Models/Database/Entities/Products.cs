@@ -16,7 +16,7 @@ public class Products
     public int ProductOrderId { get; set; }
 
     //  Foreign Keys
-    public ICollection<CartProduct> CartProduct { get; set; }
+    public ICollection<CartProducts> CartProduct { get; set; }
     public ICollection<ProductOrder> ProductOrder { get; set; }
 
 }

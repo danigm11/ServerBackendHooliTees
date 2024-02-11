@@ -14,7 +14,7 @@ public class MyDbContext : DbContext
     public DbSet<Products> Products { get; set; }
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }
     public DbSet<ProductOrder> ProductOrders { get; set; }
-    public DbSet<CartProduct> CartProducts { get; set; }
+    public DbSet<CartProducts> CartProducts { get; set; }
 
     // Configurar EF para crear un archivo de base de datos Sqlite
     protected override void OnConfiguring(DbContextOptionsBuilder options)

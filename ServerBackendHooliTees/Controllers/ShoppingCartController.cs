@@ -23,7 +23,7 @@ public class ShoppingCartController : ControllerBase
         return _dbContextHoolitees.ShoppingCarts;
     }
 
-    [HttpPost("addtoshopcart")]
+    /*[HttpPost("addtoshopcart")]
     public async Task<IActionResult> addProduct([FromForm] Products product)
     {
 
@@ -38,6 +38,25 @@ public class ShoppingCartController : ControllerBase
         await _dbContextHoolitees.SaveChangesAsync();
 
         return Created($"/{product.Id}", addProduc); ;
+    }*/
+
+
+    [HttpPost("addtoshopcart")]
+    public async Task<IActionResult> AddProduct(int productId, int userId, int quantity)
+    {
+
+        CartProducts addProduct = new CartProducts()
+        {
+            ProductId = productId,
+            ShoppingCartId = userId, 
+            Quantity = quantity
+        };
+
+        await _dbContextHoolitees.CartProducts.AddAsync(addProduct);
+        await _dbContextHoolitees.SaveChangesAsync();
+
+        return Created($"/{productId}", addProduct);
     }
+
 
 }

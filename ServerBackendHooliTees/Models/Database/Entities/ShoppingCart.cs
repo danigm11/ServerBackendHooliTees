@@ -9,6 +9,5 @@ public class ShoppingCart
 
 
     // Foreign Keys
-    public Users User { get; set; }
-    public ICollection<CartProduct> CartProduct { get; set; }
+    public ICollection<CartProducts> CartProduct { get; set; }
 }
