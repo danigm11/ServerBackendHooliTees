@@ -1,4 +1,4 @@
-﻿namespace EjemploImagesBackend;
+﻿namespace ServerBackendHooliTees;
 
 public class FileService
 {

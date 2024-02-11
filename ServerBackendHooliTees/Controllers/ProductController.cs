@@ -1,12 +1,8 @@
-﻿using EjemploImagesBackend;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServerBackendHooliTees.Models.Database;
 using ServerBackendHooliTees.Models.Database.Entities;
 using ServerBackendHooliTees.Models.Dtos;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ServerBackendHooliTees.Controllers;
 

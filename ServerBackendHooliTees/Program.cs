@@ -6,7 +6,7 @@ namespace ServerBackendHooliTees
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             // Configuramos para que el directorio de trabajo sea donde está el ejecutable
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
@@ -21,6 +21,7 @@ namespace ServerBackendHooliTees
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<MyDbContext>();
+            builder.Services.AddTransient<DbSeeder>();
 
             builder.Services.AddAuthentication().AddJwtBearer(options =>
             {
@@ -44,7 +45,10 @@ namespace ServerBackendHooliTees
             using (IServiceScope scope = app.Services.CreateScope())
             {
                 MyDbContext dbContext = scope.ServiceProvider.GetService<MyDbContext>();
-                dbContext.Database.EnsureCreated();
+                //dbContext.Database.EnsureCreated();
+                //  Seeder
+                DbSeeder dbSeeder = scope.ServiceProvider.GetService<DbSeeder>();
+                await dbSeeder.SeedAsync();
             }
 
             // Configure the HTTP request pipeline.
