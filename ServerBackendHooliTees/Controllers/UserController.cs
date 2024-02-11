@@ -117,12 +117,6 @@ public class UserController : ControllerBase
                     SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
                     string stringToken = tokenHandler.WriteToken(token);
 
-                    /*long id;
-
-                    if (userList.Email == userLoginDto.Email )
-                    {
-                        d = userList.Id;
-                    }*/
 
                     //return Ok(stringToken);
                     return Ok(new { StringToken = stringToken, userList.Id });
