@@ -31,7 +31,15 @@ public class ShoppingCartController : ControllerBase
         var product = await _dbContextHoolitees.CartProducts
                         .FirstOrDefaultAsync(id => id.ShoppingCartId == userId && id.ProductId == productId);
 
-        if (product == null) 
+        if (product != null) 
+        {
+
+            product.Quantity += quantity;
+            _dbContextHoolitees.CartProducts.Update(product);
+            await _dbContextHoolitees.SaveChangesAsync();
+            return Ok("Producto actualizado");
+
+        } else
         {
 
             CartProducts addProduct = new CartProducts()
@@ -46,12 +54,6 @@ public class ShoppingCartController : ControllerBase
 
             return Created($"/{productId}", addProduct);
 
-        } else
-        {
-            product.Quantity += quantity;
-            _dbContextHoolitees.CartProducts.Update(product);
-            await _dbContextHoolitees.SaveChangesAsync();
-            return Ok("Producto actualizado");
         }
 
     }
