@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ServerBackendHooliTees.Models.Database;
 using ServerBackendHooliTees.Models.Database.Entities;
 
@@ -23,40 +24,36 @@ public class ShoppingCartController : ControllerBase
         return _dbContextHoolitees.ShoppingCarts;
     }
 
-    /*[HttpPost("addtoshopcart")]
-    public async Task<IActionResult> addProduct([FromForm] Products product)
-    {
-
-        CartProduct addProduc = new CartProduct()
-        {
-            ProductsId = product.Id,
-            ShoppingCartId = product.Id,
-            Quantity = 1
-        };
-
-        await _dbContextHoolitees.CartProducts.AddAsync(addProduc);
-        await _dbContextHoolitees.SaveChangesAsync();
-
-        return Created($"/{product.Id}", addProduc); ;
-    }*/
-
-
     [HttpPost("addtoshopcart")]
     public async Task<IActionResult> AddProduct([FromForm]int productId, [FromForm] int userId, [FromForm] int quantity)
     {
 
-        CartProducts addProduct = new CartProducts()
+        var product = await _dbContextHoolitees.CartProducts
+                        .FirstOrDefaultAsync(id => id.ShoppingCartId == userId && id.ProductId == productId);
+
+        if (product == null) 
         {
-            ProductId = productId,
-            ShoppingCartId = userId, 
-            Quantity = quantity
-        };
 
-        await _dbContextHoolitees.CartProducts.AddAsync(addProduct);
-        await _dbContextHoolitees.SaveChangesAsync();
+            CartProducts addProduct = new CartProducts()
+            {
+                ProductId = productId,
+                ShoppingCartId = userId,
+                Quantity = quantity
+            };
 
-        return Created($"/{productId}", addProduct);
+            await _dbContextHoolitees.CartProducts.AddAsync(addProduct);
+            await _dbContextHoolitees.SaveChangesAsync();
+
+            return Created($"/{productId}", addProduct);
+
+        } else
+        {
+            product.Quantity += quantity;
+            _dbContextHoolitees.CartProducts.Update(product);
+            await _dbContextHoolitees.SaveChangesAsync();
+            return Ok("Producto actualizado");
+        }
+
     }
-
 
 }
