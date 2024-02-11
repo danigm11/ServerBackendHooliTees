@@ -42,7 +42,7 @@ public class ShoppingCartController : ControllerBase
 
 
     [HttpPost("addtoshopcart")]
-    public async Task<IActionResult> AddProduct(int productId, int userId, int quantity)
+    public async Task<IActionResult> AddProduct([FromForm]int productId, [FromForm] int userId, [FromForm] int quantity)
     {
 
         CartProducts addProduct = new CartProducts()
