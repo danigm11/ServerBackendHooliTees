@@ -107,7 +107,87 @@ public class DbSeeder
                 Price = 15.99m,
                 Stock = 10,
                 Image = "images/7.jpg"
-            }
+            },
+            new Products()
+            {
+                Name = "Camiseta de los Malavariks",
+                Description = "Son el mejor equipo de la NBA",
+                Price = 19.99m,
+                Stock = 10,
+                Image = "images/b1.png"
+            },
+            new Products()
+            {
+                Name = "Camiseta de los Lagos",
+                Description = "Un tal pablo,que es muy alto, juega aquí",
+                Price = 19.99m,
+                Stock = 10,
+                Image = "images/b2.png"
+            },
+            new Products()
+            {
+                Name = "Camiseta de los toros de chicago",
+                Description = "Posiblemente el equipo favorito de Al Capone",
+                Price = 19.99m,
+                Stock = 10,
+                Image = "images/b3.png"
+            },
+            new Products()
+            {
+                Name = "Camiseta de los guerreros",
+                Description = "La mejor camiseta sin duda\nHecho para guerreros de verdad",
+                Price = 19.99m,
+                Stock = 10,
+                Image = "images/b4.png"
+            },
+            new Products()
+            {
+                Name = "Camiseta de los ciervos",
+                Description = "No se porque dejan ciervos jugar contra humanos, pero es su equipación",
+                Price = 19.99m,
+                Stock = 10,
+                Image = "images/b5.png"
+            },
+            new Products()
+            {
+                Name = "Camiseta del calor",
+                Description = "Para los conchasumare del team calor",
+                Price = 19.99m,
+                Stock = 10,
+                Image = "images/b6.png"
+            },
+            new Products()
+            {
+                Name = "Camiseta de los bola",
+                Description = "Con esta camiseta puedes tirar mejor que ese tal pablo",
+                Price = 19.99m,
+                Stock = 10,
+                Image = "images/b7.png"
+            },
+            new Products()
+            {
+                Name = "Camiseta de los soles",
+                Description = "Para los fervientes seguidores que les gusta el día",
+                Price = 19.99m,
+                Stock = 10,
+                Image = "images/b8.png"
+            },
+            new Products()
+            {
+                Name = "Camiseta irlandesa",
+                Description = "Para los aficionados al dia de san patricio",
+                Price = 19.99m,
+                Stock = 10,
+                Image = "images/b9.png"
+            },
+            new Products()
+            {
+                Name = "Camiseta de los pepitos",
+                Description = "Sí eres pepito, aqui esta tu camiseta",
+                Price = 19.99m,
+                Stock = 10,
+                Image = "images/b10.png"
+            },
         ];
 
         await _dbContextHoolitees.Products.AddRangeAsync(products);
