@@ -8,8 +8,8 @@ public class Orders
     public decimal PriceETH { get; set; }
     public string Hash { get; set; }
     public string ClientWallet { get; set; }
-    public decimal TotalPrice { get; set; }
-    public string Status { get; set; }
+    public string TotalPrice { get; set; }
+    public bool Status { get; set; }
     public DateTime Date { get; set; }
 
     public int UsersId { get; set; }
