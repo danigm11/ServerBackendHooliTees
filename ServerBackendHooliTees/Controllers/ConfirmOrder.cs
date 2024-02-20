@@ -16,7 +16,7 @@ namespace ServerBackendHooliTees.Controllers
     public class ConfirmOrder : ControllerBase
     {
 
-        private const string OUR_WALLET = "0x2FB33CAA5ad35ee90dA38254502b5576BF3eBF10";
+        private const string OUR_WALLET = "0x123D68808120295662d794753E3519202B1F1Fc2";
         private const string NETWORK_URL = "https://rpc.sepolia.org";
 
         private readonly MyDbContext _hooliteesDataBase;
@@ -26,8 +26,8 @@ namespace ServerBackendHooliTees.Controllers
             _hooliteesDataBase = hooliteesDataBase;
         }
 
-        [HttpPost("buy/{productID}")]
-        public async Task<TransactionToSing> BuyAsync(int userID, [FromBody] string clientWallet, int totalPrice)
+        [HttpPost("buyProducts")]
+        public async Task<TransactionToSing> BuyAsync([FromForm] string clientWallet, int totalPrice, int userID)
         {
             CartProducts cartProducts = _hooliteesDataBase.CartProducts
                 .FirstOrDefault(id => id.ShoppingCartId  == userID);
