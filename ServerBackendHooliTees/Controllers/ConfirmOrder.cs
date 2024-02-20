@@ -27,7 +27,7 @@ namespace ServerBackendHooliTees.Controllers
         }
 
         [HttpPost("buyProducts")]
-        public async Task<TransactionToSing> BuyAsync([FromForm] string clientWallet, int totalPrice, int userID)
+        public async Task<TransactionToSing> BuyAsync([FromForm] string clientWallet, [FromForm] decimal totalPrice ,[FromForm] int userID)
         {
             CartProducts cartProducts = _hooliteesDataBase.CartProducts
                 .FirstOrDefault(id => id.ShoppingCartId  == userID);
