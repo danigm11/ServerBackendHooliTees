@@ -57,6 +57,7 @@ namespace ServerBackendHooliTees.Controllers
 
             _hooliteesDataBase.Orders.Add(orders);
             _hooliteesDataBase.CartProducts.Remove(_hooliteesDataBase.CartProducts.FirstOrDefault(p => p.ShoppingCartId == userID));
+            await _hooliteesDataBase.SaveChangesAsync();
             transactionToSing.Id = orders.Id;
 
 
