@@ -16,6 +16,9 @@ namespace ServerBackendHooliTees.Controllers
     public class ConfirmOrder : ControllerBase
     {
 
+        //carteraPortatilJRR = "0x2FB33CAA5ad35ee90dA38254502b5576BF3eBF10";
+        //carteraCasaJRR = "0x123D68808120295662d794753E3519202B1F1Fc2";
+
         private const string OUR_WALLET = "0x2FB33CAA5ad35ee90dA38254502b5576BF3eBF10";
         private const string NETWORK_URL = "https://rpc.sepolia.org";
 
