@@ -11,6 +11,7 @@ public class MyDbContext : DbContext
     //  Tablas
     public DbSet<Users> Users { get; set; }
     public DbSet<Orders> Orders { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Products> Products { get; set; }
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }
     public DbSet<ProductOrder> ProductOrders { get; set; }

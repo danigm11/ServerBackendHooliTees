@@ -50,18 +50,18 @@ namespace ServerBackendHooliTees.Controllers
                 GasPrice = (await web3.Eth.GasPrice.SendRequestAsync()).HexValue
             };
 
-            Orders orders = new Orders()
+            Transaction transaction = new Transaction()
             {
-                Id = _hooliteesDataBase.Orders.Count(),
                 ClientWallet = transactionToSing.From,
-                TotalPrice = transactionToSing.Value,
+                Value = transactionToSing.Value,
 
             };
 
-            _hooliteesDataBase.Orders.Add(orders);
+            await _hooliteesDataBase.Transactions.AddAsync(transaction);
+            //_hooliteesDataBase.ProductOrders.AddAsync(_hooliteesDataBase.CartProducts.FirstOrDefault(p => p.ShoppingCartId == userID));
             _hooliteesDataBase.CartProducts.Remove(_hooliteesDataBase.CartProducts.FirstOrDefault(p => p.ShoppingCartId == userID));
             await _hooliteesDataBase.SaveChangesAsync();
-            transactionToSing.Id = orders.Id;
+            transactionToSing.Id = transaction.Id;
 
 
             return transactionToSing;
@@ -72,8 +72,11 @@ namespace ServerBackendHooliTees.Controllers
         public async Task<bool> CheckTransactionAsync(int transactionId, [FromBody] string txHash)
         {
             bool success = false;
-            Orders order = _hooliteesDataBase.Orders.FirstOrDefault(id => id.Id == transactionId);
-            order.Hash = txHash;
+            Transaction transaction = await _hooliteesDataBase.Transactions.FirstOrDefaultAsync(id => id.Id == transactionId);
+            Console.WriteLine(transaction);
+            transaction.Hash = txHash;
+            Console.WriteLine(txHash);
+            Console.WriteLine(transaction.Hash);
 
             Web3 web3 = new Web3(NETWORK_URL);
             var receiptPollingService = new TransactionReceiptPollingService(
@@ -89,14 +92,14 @@ namespace ServerBackendHooliTees.Controllers
 
                 Console.WriteLine(transactionEth.TransactionHash == transactionReceipt.TransactionHash);
                 Console.WriteLine(transactionReceipt.Status.Value == 1);
-                Console.WriteLine(transactionReceipt.TransactionHash == order.Hash);
-                Console.WriteLine(transactionReceipt.From == order.ClientWallet);
+                Console.WriteLine(transactionReceipt.TransactionHash == transaction.Hash);
+                Console.WriteLine(transactionReceipt.From == transaction.ClientWallet);
                 Console.WriteLine(transactionReceipt.To.Equals(OUR_WALLET, StringComparison.OrdinalIgnoreCase));
 
                 success = transactionEth.TransactionHash == transactionReceipt.TransactionHash
                     && transactionReceipt.Status.Value == 1 // Transacción realizada con éxito
-                    && transactionReceipt.TransactionHash == order.Hash // El hash es el mismo
-                    && transactionReceipt.From == order.ClientWallet // El dinero viene del cliente
+                    && transactionReceipt.TransactionHash == transaction.Hash // El hash es el mismo
+                    && transactionReceipt.From == transaction.ClientWallet // El dinero viene del cliente
                     && transactionReceipt.To.Equals(OUR_WALLET, StringComparison.OrdinalIgnoreCase); // El dinero se ingresa en nuestra cuenta
             }
             catch (Exception ex)
@@ -104,7 +107,12 @@ namespace ServerBackendHooliTees.Controllers
                 Console.WriteLine($"Error al esperar la transacción: {ex.Message}");
             }
 
-            order.Status = success;
+            transaction.Completed = success;
+
+            if (success)
+            {
+
+            }
 
             return success;
         }
