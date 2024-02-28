@@ -8,5 +8,6 @@ public class Transaction
     public string Value { get; set; }
     public string Hash { get; set; }
     public bool Completed { get; set; }
+    public int userId { get; set; }
 
 }

@@ -50,17 +50,17 @@ namespace ServerBackendHooliTees.Controllers
                 GasPrice = (await web3.Eth.GasPrice.SendRequestAsync()).HexValue
             };
 
-            Orders transaction = new Orders()
+            Transaction transaction = new Transaction()
             {
                 ClientWallet = transactionToSing.From,
-                TotalPrice = transactionToSing.Value,
-                UsersId = userID,
+                Value = transactionToSing.Value,
+                userId = userID,
 
             };
 
 
 
-            await _hooliteesDataBase.Orders.AddAsync(transaction);
+            await _hooliteesDataBase.Transactions.AddAsync(transaction);
             await _hooliteesDataBase.SaveChangesAsync();
             transactionToSing.Id = transaction.Id;
 
@@ -73,7 +73,7 @@ namespace ServerBackendHooliTees.Controllers
         public async Task<bool> CheckTransactionAsync(int transactionId, [FromBody] string txHash)
         {
             bool success = false;
-            Orders transaction = await _hooliteesDataBase.Orders.FirstOrDefaultAsync(id => id.Id == transactionId);
+            Transaction transaction = await _hooliteesDataBase.Transactions.FirstOrDefaultAsync(id => id.Id == transactionId);
             Console.WriteLine(transaction);
             transaction.Hash = txHash;
             Console.WriteLine(txHash);
@@ -112,24 +112,33 @@ namespace ServerBackendHooliTees.Controllers
 
             if (success)
             {
-                CartProducts[] productsCarrito = _hooliteesDataBase.CartProducts.Where(p => p.ShoppingCartId == transaction.UsersId).ToArray();
+                CartProducts[] productsCarrito2 = _hooliteesDataBase.CartProducts.Where(p => p.ShoppingCartId == transaction.userId).ToArray();
+
+                CartProducts[] productsCarrito = [.. _hooliteesDataBase.CartProducts.Where(p => p.ShoppingCartId == transaction.userId)];
+
+                Console.WriteLine(productsCarrito.Length);
+                Console.WriteLine(productsCarrito2.Length);
 
                 for (int i = 0; i < productsCarrito.Length; i++)
                 {
+                    Console.WriteLine("i:"+i);
                     ProductOrder nuevoProductOrder = new ProductOrder()
                     {
                         ProductsId = productsCarrito[i].ProductId,
                         Quantity = productsCarrito[i].Quantity,
                         OrdersId = transaction.Id.ToString(),
                     };
+                    Console.WriteLine("orderID:" + nuevoProductOrder.OrdersId);
                     await _hooliteesDataBase.ProductOrders.AddAsync(nuevoProductOrder);
                 }
 
+
                 for (int i = 0; i < productsCarrito.Length; i++)
                 {
-                    _hooliteesDataBase.CartProducts.Remove(_hooliteesDataBase.CartProducts.FirstOrDefault(p => p.ShoppingCartId == transaction.UsersId));
+                    _hooliteesDataBase.CartProducts.Remove(_hooliteesDataBase.CartProducts.FirstOrDefault(p => p.ShoppingCartId == transaction.userId));
                 }
             }
+            await _hooliteesDataBase.SaveChangesAsync();
 
             return success;
         }
