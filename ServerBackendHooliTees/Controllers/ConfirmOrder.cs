@@ -136,6 +136,7 @@ namespace ServerBackendHooliTees.Controllers
                 for (int i = 0; i < productsCarrito.Length; i++)
                 {
                     _hooliteesDataBase.CartProducts.Remove(_hooliteesDataBase.CartProducts.FirstOrDefault(p => p.ShoppingCartId == transaction.userId));
+                    await _hooliteesDataBase.SaveChangesAsync();
                 }
             }
             transaction.Completed = success;
