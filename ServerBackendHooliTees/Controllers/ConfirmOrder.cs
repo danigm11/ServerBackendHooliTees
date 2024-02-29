@@ -108,7 +108,7 @@ namespace ServerBackendHooliTees.Controllers
                 Console.WriteLine($"Error al esperar la transacción: {ex.Message}");
             }
 
-            //transaction.Completed = success;
+            
 
             if (success)
             {
@@ -138,6 +138,7 @@ namespace ServerBackendHooliTees.Controllers
                     _hooliteesDataBase.CartProducts.Remove(_hooliteesDataBase.CartProducts.FirstOrDefault(p => p.ShoppingCartId == transaction.userId));
                 }
             }
+            transaction.Completed = success;
             await _hooliteesDataBase.SaveChangesAsync();
 
             return success;
