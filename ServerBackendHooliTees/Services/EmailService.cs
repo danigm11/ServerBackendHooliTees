@@ -7,9 +7,9 @@ internal class EmailService
 {
     private const string SMTP_HOST = "smtp.gmail.com";
     private const int SMTP_PORT = 587;
-    private const string EMAIL_FROM = "tucorreo@gamil.com";
+    private const string EMAIL_FROM = "hooliteesempresa@gmail.com";
     // Se obtiene de este video https://www.youtube.com/watch?v=Yv_Wh0zjMw4
-    private const string PASSWORD_EMAIL_FROM = "contraseña";
+    private const string PASSWORD_EMAIL_FROM = "ektm asma fpog ijdg";
 
     public async Task SendMessageAsync(string to, string subject, string body, bool isHtml = false)
     {
