@@ -145,5 +145,15 @@ namespace ServerBackendHooliTees.Controllers
             return success;
         }
 
+        [HttpPost("precioETH")]
+        public async Task<decimal> GetPrecio([FromForm] decimal totalPrice)
+        {
+            using CoincGeckoApi coincGeckoApi = new CoincGeckoApi();
+            decimal ethereumEur = await coincGeckoApi.GetEthereumPriceAsync();
+            decimal result = (totalPrice / ethereumEur);
+            return result;
+        }
+
+
     }
 }

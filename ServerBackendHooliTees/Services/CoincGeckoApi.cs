@@ -1,4 +1,6 @@
-﻿namespace ServerBackendHooliTees.Services;
+﻿using Newtonsoft.Json;
+
+namespace ServerBackendHooliTees.Services;
 
 public class CoincGeckoApi : IDisposable
 {
@@ -18,8 +20,9 @@ public class CoincGeckoApi : IDisposable
     public async Task<decimal> GetEthereumPriceAsync()
     {
         string json = await HttpClient.GetStringAsync("coins/ethereum");
-
-        return 1000;
+        var data = JsonConvert.DeserializeObject<dynamic>(json);
+        decimal price = (decimal)data.market_data.current_price.eur;
+        return price;
     }
 
     public void Dispose()
