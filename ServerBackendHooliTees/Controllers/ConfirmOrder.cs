@@ -176,7 +176,7 @@ namespace ServerBackendHooliTees.Controllers
                     <tr>
                         <td>{productEmail.Name}</td>
                         <td>{productEmail.Price}</td>
-                        <td><img src=""{productEmail.Image}"" alt=""{productEmail.Name}""></td>
+                        <td><img src=""https://localhost:7093/{productEmail.Image}"" alt=""{productEmail.Name}""></td>
                     </tr> ";
                 }
 
