@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Nethereum.Util;
 
 namespace ServerBackendHooliTees.Controllers;
 
@@ -70,6 +71,41 @@ public class UserController : ControllerBase
         await _dbContextHoolitees.SaveChangesAsync();
 
         return Created($"/{newUser.Id}", userCreated);
+    }
+
+    [HttpPost("updateUser")]
+    public async Task<bool> Update([FromForm] string name, [FromForm] string email, [FromForm] string password, [FromForm] string address, [FromForm] int userId)
+    {
+
+        var user = _dbContextHoolitees.Users.FirstOrDefault(p => p.Id == userId);
+
+
+        if (!user.Name.Equals(name) && name != null)
+        {
+            user.Name = name;
+        }
+
+        if (!user.Email.Equals(email) && email != null)
+        {
+            user.Email = email;
+        }
+
+        if (!user.Password.Equals(password) && password != null)
+        {
+            string hashedPassword = passwordHasher.HashPassword(name, password);
+            user.Password = hashedPassword;
+        }
+
+        if (!user.Address.Equals(address) && address != null)
+        {
+            user.Address = address;
+        }
+
+        _dbContextHoolitees.Users.Update(user);
+        await _dbContextHoolitees.SaveChangesAsync();
+
+        return true;
+
     }
 
     [HttpPost("login")]
