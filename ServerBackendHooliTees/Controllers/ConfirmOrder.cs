@@ -57,10 +57,10 @@ namespace ServerBackendHooliTees.Controllers
                 ClientWallet = transactionToSing.From,
                 Value = transactionToSing.Value,
                 userId = userID,
+                price = totalPrice,
+                fecha = DateTime.Now.ToString("dd MM yyyy")
 
             };
-
-
 
             await _hooliteesDataBase.Transactions.AddAsync(transaction);
             await _hooliteesDataBase.SaveChangesAsync();

@@ -10,4 +10,7 @@ public class Transaction
     public bool Completed { get; set; }
     public int userId { get; set; }
 
+    public decimal price { get; set; }  
+    public string fecha { get; set; }
+
 }
