@@ -127,7 +127,69 @@ public class UserController : ControllerBase
         }
         return Unauthorized("Usuario no existe");
     }
+[HttpDelete("deleteUser/{userId}")]
+public IActionResult DeleteUser(long userId)
+{
+    try
+    {
+        // Buscar el usuario en la base de datos
+        var userToDelete = _dbContextHoolitees.Users.FirstOrDefault(user => user.Id == userId);
 
+        if (userToDelete == null)
+        {
+            return NotFound($"Usuario con ID {userId} no encontrado");
+        }
+
+        // Eliminar el usuario
+        _dbContextHoolitees.Users.Remove(userToDelete);
+        _dbContextHoolitees.SaveChanges();
+
+        return Ok(new { Message = "Usuario eliminado con éxito" });
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(new { Error = $"Error al eliminar el usuario: {ex.Message}" });
+    }
+}
+    [HttpPut("updateUserRole/{userId}")]
+    public IActionResult UpdateUserRole(long userId, [FromBody] bool isAdmin)
+    {
+        try
+        {
+            // Buscar el usuario en la base de datos
+            var userToUpdate = _dbContextHoolitees.Users.FirstOrDefault(user => user.Id == userId);
+
+            if (userToUpdate == null)
+            {
+                return NotFound($"Usuario con ID {userId} no encontrado");
+            }
+
+            // Actualizar el rol
+            userToUpdate.IsAdmin = isAdmin;
+            _dbContextHoolitees.SaveChanges();
+
+            return Ok(new { Message = "Rol de usuario actualizado con éxito" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Error = $"Error al actualizar el rol del usuario: {ex.Message}" });
+        }
+    }
+    [HttpGet("userinfo/{userId}")]
+    public IActionResult GetUserInfoById(long userId)
+    {
+        var user = _dbContextHoolitees.Users
+            .Where(u => u.Id == userId)
+            .Select(ToDto)
+            .FirstOrDefault();
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(user);
+    }
     private UserSignDto ToDto(Users users)
     {
         return new UserSignDto()
@@ -136,7 +198,8 @@ public class UserController : ControllerBase
             Name = users.Name,
             Email = users.Email,
             Password = users.Password,
-            Address = users.Address
+            Address = users.Address,
+            isAdmin =users.IsAdmin
         };
     }
 

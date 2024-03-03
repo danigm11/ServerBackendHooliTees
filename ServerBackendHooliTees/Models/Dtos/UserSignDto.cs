@@ -11,4 +11,6 @@ public class UserSignDto
 
     public string Address { get; set; }
 
+   public bool isAdmin { get; set; }
+
 }
