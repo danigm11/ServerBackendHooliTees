@@ -224,8 +224,9 @@ namespace ServerBackendHooliTees.Controllers
         {
             using CoincGeckoApi coincGeckoApi = new CoincGeckoApi();
             decimal ethereumEur = await coincGeckoApi.GetEthereumPriceAsync();
-            decimal result = (totalPrice / ethereumEur);
-            return result;
+            /*decimal result = (totalPrice / ethereumEur);
+            return result;*/
+            return ethereumEur;
         }
 
 
