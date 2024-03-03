@@ -170,13 +170,15 @@ namespace ServerBackendHooliTees.Controllers
 
                 // Agregar filas para cada producto en el carrito - 
 
+                const string IMG_URL = "https://localhost:7093/";
+              
                 foreach (var productEmail in products)
                 {
                     body += $@"
                     <tr>
                         <td>{productEmail.Name}</td>
                         <td>{productEmail.Price}</td>
-                        <td><img src=""https://localhost:7093/{productEmail.Image}"" alt=""{productEmail.Name}""></td>
+                        <td><img src=""{IMG_URL}{productEmail.Image}"" alt=""{productEmail.Name}"" width=""180"" height=""180""></td>
                     </tr> ";
                 }
 
