@@ -204,6 +204,11 @@ namespace ServerBackendHooliTees.Controllers
                         Quantity = productsCarrito[i].Quantity,
                         OrdersId = transaction.Id.ToString(),
                     };
+
+                    var modifiedProduct = _hooliteesDataBase.Products.FirstOrDefault(p => p.Id == productsCarrito[i].ProductId);
+                    modifiedProduct.Stock -= productsCarrito[i].Quantity;
+                    _hooliteesDataBase.Products.Update(modifiedProduct);
+
                     Console.WriteLine("orderID:" + nuevoProductOrder.OrdersId);
                     await _hooliteesDataBase.ProductOrders.AddAsync(nuevoProductOrder);
                 }
