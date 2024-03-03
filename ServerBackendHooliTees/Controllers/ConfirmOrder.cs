@@ -8,6 +8,8 @@ using System.Numerics;
 using Nethereum.Web3;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.TransactionReceipts;
+using Recursos;
+using System.Collections;
 
 namespace ServerBackendHooliTees.Controllers
 {
@@ -115,6 +117,78 @@ namespace ServerBackendHooliTees.Controllers
                 CartProducts[] productsCarrito2 = _hooliteesDataBase.CartProducts.Where(p => p.ShoppingCartId == transaction.userId).ToArray();
 
                 CartProducts[] productsCarrito = [.. _hooliteesDataBase.CartProducts.Where(p => p.ShoppingCartId == transaction.userId)];
+
+
+                List<Products> products = new List<Products>();
+                
+                //  Añade los productos del carrito a una lista de productos para poder mandarlo por Email.
+                foreach (var productEmail in productsCarrito2)
+                {
+                    products.Add(_hooliteesDataBase.Products.FirstOrDefault(p => p.Id == productEmail.ProductId));
+                }
+
+                var email = new EmailService();
+
+                var user = _hooliteesDataBase.Users.FirstOrDefault(p => p.Id == transaction.userId);
+                string to = user.Email;
+
+                string subject = "Confirmación de compra";
+                string body = @"
+                    <!DOCTYPE html>
+                    <html lang=""es"">
+                      <head>
+                        <meta charset=""UTF-8"">
+                        <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                        <title>Correo electrónico HTML</title>
+                        <style>
+                          table {
+                            width: 100%;
+                            border-collapse: collapse;
+                          }
+                          th,
+                          td {
+                            border: 1px solid #dddddd;
+                            padding: 8px;
+                            text-align: left;
+                          }
+                          th {
+                            background-color: #f2f2f2;
+                          }
+                        </style>
+                      </head>
+                      <body>
+                        <h2>Confirmación de compra</h2>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Nombre del Producto</th>
+                              <th>Precio</th>
+                              <th>Imagen</th>
+                            </tr>
+                          </thead>
+                          <tbody>";
+
+                // Agregar filas para cada producto en el carrito - 
+
+                foreach (var productEmail in products)
+                {
+                    body += $@"
+                    <tr>
+                        <td>{productEmail.Name}</td>
+                        <td>{productEmail.Price}</td>
+                        <td><img src=""https://localhost:7093/{productEmail.Image}"" alt=""{productEmail.Name}""></td>
+                    </tr> ";
+                }
+
+                // Cerrar el cuerpo del correo electrónico HTML
+                body += @"
+                          </tbody>
+                        </table>
+                      </body>
+                    </html>
+                ";
+
+                await email.SendMessageAsync(to, subject, body, isHtml: true);
 
                 Console.WriteLine(productsCarrito.Length);
                 Console.WriteLine(productsCarrito2.Length);
