@@ -127,6 +127,10 @@ namespace ServerBackendHooliTees.Controllers
                     products.Add(_hooliteesDataBase.Products.FirstOrDefault(p => p.Id == productEmail.ProductId));
                 }
 
+                using CoincGeckoApi coincGeckoApi = new CoincGeckoApi();
+                decimal ethereumEur = await coincGeckoApi.GetEthereumPriceAsync();
+                decimal totalEth = transaction.price / ethereumEur;
+
                 var email = new EmailService();
 
                 var user = _hooliteesDataBase.Users.FirstOrDefault(p => p.Id == transaction.userId);
@@ -157,7 +161,11 @@ namespace ServerBackendHooliTees.Controllers
                         </style>
                       </head>
                       <body>
-                        <h2>Confirmación de compra</h2>
+                        <h2>Confirmación de compra</h2>";
+
+                body += $@"
+                        <p>Precio Total EUR: {transaction.price}</p>
+                        <p>Precio Total Ethereum: {totalEth}</p>
                         <table>
                           <thead>
                             <tr>
@@ -168,10 +176,12 @@ namespace ServerBackendHooliTees.Controllers
                           </thead>
                           <tbody>";
 
+
+
                 // Agregar filas para cada producto en el carrito - 
 
                 const string IMG_URL = "https://localhost:7093/";
-              
+
                 foreach (var productEmail in products)
                 {
                     body += $@"
